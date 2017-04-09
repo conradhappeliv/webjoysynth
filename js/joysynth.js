@@ -1,7 +1,8 @@
 class JoySynth {
-    constructor(aCtx, gamepad) {
+    constructor(aCtx, outputNode, gamepad) {
         this.octave = 4;
         this.waveLock = false;
+        this.volLock = false;
 
         let sin = aCtx.createOscillator();
         let sinGain = aCtx.createGain();
@@ -33,19 +34,6 @@ class JoySynth {
         mod_LFO.start();
 
         let combiner = aCtx.createChannelMerger(1);
-        //     aCtx.createScriptProcessor(256, 4, 1);
-        // combiner.onaudioprocess = function(e) {
-        //     let input = e.inputBuffer;
-        //     let output = e.outputBuffer.getChannelData(0);
-        //     for(let i = 0; i < input.length; i++) {
-        //         output[i] = (
-        //                 input.getChannelData(0)[i] +
-        //                 input.getChannelData(1)[i] +
-        //                 input.getChannelData(2)[i] +
-        //                 input.getChannelData(3)[i]
-        //         )*.25;
-        //     }
-        // };
         sin.connect(sinGain);
         sinGain.connect(combiner);
         square.connect(squareGain);
@@ -84,7 +72,7 @@ class JoySynth {
         gain.connect(compressor);
         delay1.connect(compressor);
         delay2.connect(compressor);
-        compressor.connect(aCtx.destination);
+        compressor.connect(outputNode);
 
         sin.start();
         square.start();
@@ -138,7 +126,8 @@ class JoySynth {
         this.nodes.saw.frequency.value = freq;
 
         // overall gain on RT
-        this.nodes.gain.gain.value = this.gamepad.buttons[7].value;
+        if(this.buttonPressed(5)) this.volLock = !this.volLock;
+        if(!this.volLock) this.nodes.gain.gain.value = this.gamepad.buttons[7].value;
 
         // individual gains on RS
         if(this.buttonPressed(11)) this.waveLock = !this.waveLock;

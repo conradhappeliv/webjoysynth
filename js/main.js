@@ -1,4 +1,5 @@
 let aCtx;
+let outputNode;
 let controllers = {};
 
 function createControllers() {
@@ -33,6 +34,7 @@ function pollGamepads() {
     let curControllers = navigator.getGamepads();
     for(let i = 0; i < curControllers.length; i++) {
         if(curControllers[i] != null) {
+            curControllers[i].mapping = "standard";
             if(i in controllers) {
                 if(!controllers[i].active) {
                     console.log("CONTROLLER: Reconnecting "+i);
@@ -40,7 +42,7 @@ function pollGamepads() {
                 }
             } else {
                 console.log("CONTROLLER: Connecting "+i);
-                controllers[i] = new JoySynth(aCtx, curControllers[i]);
+                controllers[i] = new JoySynth(aCtx, outputNode, curControllers[i]);
             }
             controllers[i].pollGamepad();
         } else {
@@ -55,6 +57,16 @@ function pollGamepads() {
 
 function init() {
     aCtx = new (window.AudioContext || window.webkitAudioContext);
+    outputNode = aCtx.createChannelMerger(1);
+    let compressor = aCtx.createDynamicsCompressor();
+    compressor.threshold.value = -30;
+    compressor.knee.value = 40;
+    compressor.ratio.value = 12;
+    compressor.attack.value = 0;
+    compressor.release.value = 0.25;
+
+    outputNode.connect(compressor);
+    compressor.connect(aCtx.destination);
 
     requestAnimationFrame(pollGamepads);
 
