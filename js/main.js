@@ -50,7 +50,7 @@ function pollGamepads(timestamp) {
                 }
             } else {
                 console.log("CONTROLLER: Connecting "+i);
-                let viewController = {connected: ko.observable(true), waveLock: ko.observable(false), noteLock: ko.observable(false), volLock: ko.observable(false), delayLock: ko.observable(false)};
+                let viewController = {connected: ko.observable(true), waveLock: ko.observable(false), noteLock: ko.observable(false), volLock: ko.observable(false), delayLock: ko.observable(false), pitchSnap: ko.observable(false), scaleName: ko.observable('major')};
                 viewModel.controllers.push(viewController);
                 controllers[i] = new JoySynth(aCtx, outputNode, curControllers[i], 'visual_0', viewController);
             }

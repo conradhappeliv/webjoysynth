@@ -12,6 +12,7 @@
         <p data-bind="text: $index"></p>
         <p>Connected: <span data-bind="text: connected"></span></p>
         <p>Locks: wave = <span data-bind="text:waveLock"></span>, volume = <span data-bind="text:volLock"></span>, note = <span data-bind="text:noteLock"></span>,  delay = <span data-bind="text:delayLock"></span></p>
+        <p>Pitch Snap: <span data-bind="text:pitchSnap"></span> <span data-bind="text:scaleName"></span> </p>
         <canvas class="visualization" data-bind="attr: { id: 'visual_'+$index() }"></canvas>
         <br>
     </div>

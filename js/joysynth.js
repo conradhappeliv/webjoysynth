@@ -1,3 +1,21 @@
+function closest(num, arr) { // http://stackoverflow.com/a/8584940/2414841
+    let mid;
+    let lo = 0;
+    let hi = arr.length - 1;
+    while (hi - lo > 1) {
+        mid = Math.floor((lo + hi) / 2);
+        if (arr[mid] < num) {
+            lo = mid;
+        } else {
+            hi = mid;
+        }
+    }
+    if (num - arr[lo] <= arr[hi] - num) {
+        return arr[lo];
+    }
+    return arr[hi];
+}
+
 class JoySynth {
     constructor(aCtx, outputNode, gamepad, visualize_canvas_id, viewController) {
         this.octave = 4;
@@ -5,7 +23,17 @@ class JoySynth {
         this.volLock = false;
         this.noteLock = false;
         this.delayLock = false;
+        this.pitchSnap = false;
+        this.curScale = 0;
         this.prevrms = [];
+        this.pitchRatios = [1, 16./15, 1.125, 1.2, 1.25, 4./3, 45. / 32, 1.5, 1.6, 5./3, 1.8, 1.875];
+        this.scales = [
+            {name: 'major', notes: [0, 2, 4, 5, 7, 9, 11]},
+            {name: 'minor', notes: [0, 2, 3, 5, 7, 8, 10]},
+            {name: 'jazz', notes: [0, 3, 5, 6, 7, 10, 11]},
+            {name: 'chromatic', notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]},
+            {name: 'whole note', notes: [0, 2, 4, 6, 8, 10]}
+        ];
 
         let sin = aCtx.createOscillator();
         let sinGain = aCtx.createGain();
@@ -137,7 +165,23 @@ class JoySynth {
         //   L: UD -> 1, LR -> 0
         //   R: UD -> 3, LR -> 2
         // buttons:
-        //    A B X Y LB RB LT RT SEL STA LJS RJS U D L R HOME
+        //    A B X Y LB 5RB LT RT SEL STA 10LJS RJS U D L R HOME
+
+        // pitch snapping
+        if(this.buttonPressed(9)) {
+            this.pitchSnap = !this.pitchSnap;
+            this.viewController.pitchSnap(this.scales[this.curScale].name);
+        }
+        if(this.buttonPressed(12)) {
+            this.curScale++;
+            if(this.curScale == this.scales.length) this.curScale = 0;
+            this.viewController.scaleName(this.scales[this.curScale].name);
+        }
+        if(this.buttonPressed(13)) {
+            this.curScale--;
+            if(this.curScale < 0) this.curScale = this.scales.length-1;
+            this.viewController.scaleName(this.scales[this.curScale].name);
+        }
 
         // overall frequency
         if(this.buttonPressed(0)) {
@@ -147,6 +191,14 @@ class JoySynth {
         let freq;
         if(!this.noteLock) {
             freq = 440 * Math.pow(2, -4 + this.octave) * Math.pow(2, this.gamepad.axes[1] * -1);
+            if(this.pitchSnap) {
+                let self = this;
+                let curRatios = this.pitchRatios.filter(function(val, ind) { return self.scales[self.curScale].notes.indexOf(ind) != -1; });
+                let oct = Math.floor(Math.log2(freq/440));
+                let ratio = closest(freq/(440*Math.pow(2, oct)), curRatios);
+                freq = 440 * Math.pow(2, oct) * ratio;
+            }
+
             this.nodes.sin.frequency.value = freq;
             this.nodes.square.frequency.value = freq;
             this.nodes.tri.frequency.value = freq;
