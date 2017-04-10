@@ -3,6 +3,11 @@
     padding: 0;
 }
 
+.visualization {
+    width:400px;
+    height:15px;
+}
+
 .controller {
     position: relative;
     width:500px;
