@@ -170,7 +170,7 @@ class JoySynth {
         // pitch snapping
         if(this.buttonPressed(9)) {
             this.pitchSnap = !this.pitchSnap;
-            this.viewController.pitchSnap(this.scales[this.curScale].name);
+            this.viewController.pitchSnap(this.pitchSnap);
         }
         if(this.buttonPressed(12)) {
             this.curScale++;

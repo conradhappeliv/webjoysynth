@@ -3,19 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>JoySynth</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
 </head>
 <body>
-    <div data-bind="foreach: {data: controllers}">
-        <p data-bind="text: $index"></p>
-        <p>Connected: <span data-bind="text: connected"></span></p>
-        <p>Locks: wave = <span data-bind="text:waveLock"></span>, volume = <span data-bind="text:volLock"></span>, note = <span data-bind="text:noteLock"></span>,  delay = <span data-bind="text:delayLock"></span></p>
-        <p>Pitch Snap: <span data-bind="text:pitchSnap"></span> <span data-bind="text:scaleName"></span> </p>
-        <canvas class="visualization" data-bind="attr: { id: 'visual_'+$index() }"></canvas>
-        <br>
+    <div class="header">
+        <div id="about">
+            <h1>JoySynth</h1>
+            <h4>, By Conrad Appel</h4>
+            <br>
+            <a data-bind="click: toggleAbout"><h2>About</h2></a>
+            <div data-bind="visible: showAbout">
+                <p>Plug in up to four gamepads and make some music! Written in vanilla JS using the Javascript Web Audio API and Gamepad API.</p>
+                <a href="https://github.com/conradhappeliv/webjoysynth">https://github.com/conradhappeliv/webjoysynth</a>
+                <br><br>
+                <p>Icons from the Noun Project: </p>
+                <ul>
+                    <li>Speaker by Dávid Gladiš</li>
+                    <li>Sound Wave by Alec Dhuse</li>
+                    <li>Music Note by Creative Stall</li>
+                    <li>Timer by Hea Poh Lin</li>
+                    <li>Piano by Edward Boatman</li>
+                </ul>
+            </div>
+        </div>
     </div>
+    <div data-bind="foreach: {data: controllers}">
+        <div class="controller">
+            <div class="controllernumbers" data-bind="css: {disconnected: !connected()}">
+                <div id="controller1" class="controllernumber" data-bind="css: {activecontroller: $index() == 0}"></div>
+                <div id="controller2" class="controllernumber" data-bind="css: {activecontroller: $index() == 1}"></div>
+                <div id="controller3" class="controllernumber" data-bind="css: {activecontroller: $index() == 2}"></div>
+                <div id="controller4" class="controllernumber" data-bind="css: {activecontroller: $index() == 3}"></div>
+            </div>
+            <div class="icons">
+                <svg data-bind="css: {iconon: volLock}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><g><path d="M56.261,36.218V8.045c-3.516-3.516-9.213-3.516-12.728,0L13.567,38.01h-2.681c-3.083,0-5.582,2.5-5.582,5.582v12.816   c0,3.082,2.499,5.58,5.582,5.58h2.68l29.966,29.967c3.515,3.516,9.212,3.516,12.728,0V63.783c4.098-3.203,6.742-8.179,6.742-13.781   C63.003,44.398,60.358,39.421,56.261,36.218z"/><path d="M82.154,49.994c0-0.032-0.004-0.063-0.004-0.096c0-0.024,0.003-0.047,0.003-0.071c-0.002-11.753-7.17-21.709-18.705-25.984   c-0.326-0.121-0.635-0.182-0.918-0.182c-1.113,0-1.797,1.024-1.979,2.04c-0.032,0.182-0.044,0.376-0.045,0.574   c-0.056,1.056,0.373,2.302,1.801,2.83c9.123,3.383,14.8,11.346,14.839,20.798c-0.026,9.458-5.702,17.432-14.827,20.818   c-1.431,0.532-1.859,1.784-1.801,2.843c0.001,0.196,0.014,0.39,0.046,0.57c0.182,1.012,0.862,2.034,1.973,2.034   c0.283,0,0.593-0.062,0.919-0.183C74.991,71.706,82.156,61.747,82.154,49.994z"/><path d="M67.929,12.755c-0.326-0.121-0.635-0.182-0.918-0.182c-1.114,0-1.797,1.023-1.979,2.038   c-0.201,1.12,0.139,2.641,1.756,3.24c14.124,5.233,22.9,17.55,22.904,32.144c0.004,14.593-8.766,26.913-22.885,32.152   c-1.615,0.601-1.954,2.121-1.754,3.24c0.183,1.016,0.863,2.039,1.976,2.039c0.283,0,0.592-0.062,0.918-0.184   c16.505-6.126,26.754-20.4,26.748-37.256C94.69,33.138,84.433,18.87,67.929,12.755z"/></g></svg>
+            <svg data-bind="css: {iconon: noteLock}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve"><path d="M14.4,7.3c-0.2,0-0.4,0.2-0.4,0.5v8.3v18.6c0,0.3-0.2,0.5-0.5,0.5c-1.7,0-3.8,0.6-5.7,1.7  c-4.1,2.4-6.2,6.3-4.7,8.7c1.4,2.5,5.9,2.6,9.9,0.2c3.2-1.8,5.2-4.6,5.2-7h0V15.5c0-0.2,0.1-0.4,0.4-0.5l21.9-4.9  c0.3-0.1,0.6,0.2,0.6,0.5v17.1c0,0.3-0.2,0.5-0.5,0.5c-1.7,0-3.8,0.6-5.7,1.7c-4.1,2.4-6.2,6.3-4.7,8.7c1.4,2.5,5.9,2.6,9.9,0.2  c3.2-1.8,5.2-4.6,5.2-7h0V9V1c0-0.3-0.3-0.5-0.6-0.5L14.4,7.3z"/></svg>
+            <svg data-bind="css: {iconon: waveLock}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="-0.123 28.66 100 53.35" enable-background="new -0.123 28.66 100 42.68" xml:space="preserve"><path d="M24.224,71.009c-0.372-0.431-0.519-1.032-1.848-7.586c-1.099-5.416-1.559-7.253-1.864-7.442c-0.096-0.06-0.739,0.037-1.429,0.213c-0.853,0.22-1.63,0.283-2.428,0.199c-1.347-0.139-1.922-0.508-3.846-2.455l-1.249-1.262l-3.211-0.283c-1.767-0.156-4.226-0.376-5.466-0.491c-2.899-0.266-3.588-0.607-2.552-1.261C0.97,50.239,2.604,50,7.499,49.594l4.309-0.357l0.499-1.056c0.715-1.514,2.425-3.281,3.876-4.008c0.664-0.333,2.283-0.286,2.511-0.286c0.836,0.337,1.521,0.836,1.895,1.05c0.056-0.152,0.824-3.493,1.706-7.423c0.882-3.931,1.771-7.525,1.974-7.989c0.833-1.902,1.374-0.867,2.669,5.111c1.1,5.075,1.654,7.079,2.384,8.624c0.612,1.295,2.026,2.888,2.564,2.888c0.196,0,0.845-0.279,1.441-0.621c1.12-0.642,1.754-0.687,3.737-0.267c0.536,0.115,0.716,0.032,1.486-0.752c1.319-1.329,2.509-3.46,4.157-7.452c0.104-0.251,0.273-0.406,0.376-0.343c0.104,0.064,0.831,1.163,1.617,2.443c2.505,4.078,2.98,4.509,5.726,5.2c0.926,0.231,3.112,0.905,4.855,1.494c2.818,0.952,3.861,1.178,5.115,1.111c0.546-0.032,0.801-0.878,1.901-6.329c0.932-4.619,1.465-6.602,1.706-6.359c0.052,0.054,0.62,2.06,1.26,4.46c1.137,4.264,1.467,5.231,1.782,5.231c0.085,0,0.641-0.863,1.231-1.919c0.593-1.055,1.185-1.954,1.315-1.998c0.305-0.102,1.125,1.532,2.516,5.001c0.604,1.508,1.243,2.902,1.421,3.099c0.402,0.446,0.696,0.346,2.086-0.71l1.108-0.842l1.603,1.094c0.917,0.627,1.727,1.046,1.895,0.981c0.161-0.06,1.003-1.302,1.873-2.756c0.867-1.455,1.721-2.672,1.893-2.707c0.223-0.044,0.574,0.455,1.193,1.688c1.372,2.753,2.582,3.495,4.242,4.525c9.844,0.67,10.455,0.769,10.455,1.686c0,0.655-0.416,0.727-5.748,0.989c-2.397,0.118-4.829,0.264-5.4,0.324c-1.447,0.825-2.414,2.428-3.322,3.627c-0.544,0.995-1.036,1.812-1.094,1.812c-0.058,0.001-0.638-0.69-1.286-1.536c-0.649-0.846-1.482-1.873-1.85-2.282c-0.657-0.73-0.698-0.744-2.108-0.744c-1.598,0-4.664,0.48-5.436,0.852c-0.304,0.146-1.102,1.21-2.042,2.721c-0.849,1.364-1.626,2.615-1.729,2.778c-0.26,0.415-0.609,0.042-1.896-2.024c-0.564-0.905-1.15-1.647-1.301-1.647c-0.198,0-0.533,1.28-1.219,4.665c-1.019,5.028-1.323,6.185-1.657,6.293c-0.298,0.096-0.536-0.834-1.362-5.301c-0.845-4.563-1.32-6.287-1.91-6.922c-0.682-0.732-2.112-0.52-5.134,0.767c-3.036,1.292-3.707,1.388-5.532,0.788c-1.193-0.391-1.431-0.417-1.716-0.181c-0.437,0.363-1.931,2.602-3.319,4.972c-0.614,1.05-1.281,2.112-1.482,2.36l-0.365,0.452l-1.869-3.637c-2.563-4.985-2.958-5.355-4.959-4.648c-1.146,0.405-1.63,0.267-3.14-0.904c-0.701-0.544-1.378-0.987-1.505-0.987	c-0.342,0-0.767,0.545-1.544,1.985c-0.899,1.665-1.28,2.949-2.701,9.112c-1.323,5.735-1.425,6.064-1.971,6.357C24.74,71.435,24.572,71.411,24.224,71.009L24.224,71.009z"/></svg>
+            <svg data-bind="css: {iconon: delayLock}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 29 29" xml:space="preserve"><g transform="translate(-150 -260)"><g xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M164.5,286c-6.342,0-11.5-5.158-11.5-11.5c0-5.832,4.367-10.652,10-11.391v-2.022c-6.749,0.747-12,6.464-12,13.412    c0,7.456,6.044,13.5,13.5,13.5c6.949,0,12.666-5.251,13.412-12h-2.021C175.152,281.633,170.332,286,164.5,286z"/><path d="M174,274h-8.092c-0.15-0.424-0.484-0.758-0.908-0.908V265h-1v8.092c-0.581,0.207-1,0.756-1,1.408    c0,0.828,0.672,1.5,1.5,1.5c0.652,0,1.201-0.419,1.408-1H174V274z"/><path d="M169.807,264.309l1.004-1.739c-0.74-0.393-1.521-0.722-2.336-0.973l-0.518,1.936    C168.601,263.736,169.217,264,169.807,264.309z"/><path d="M175.975,274h2c-0.031-0.859-0.138-1.697-0.322-2.508l-1.932,0.518C175.863,272.654,175.945,273.32,175.975,274z"/><path d="M172.258,266.035l1.418-1.418c-0.618-0.574-1.287-1.089-2.004-1.54l-1.002,1.734    C171.236,265.173,171.765,265.584,172.258,266.035z"/><path d="M174.188,268.329l1.735-1.001c-0.451-0.717-0.967-1.387-1.54-2.004l-1.418,1.418    C173.416,267.234,173.826,267.764,174.188,268.329z"/><path d="M166.989,263.279l0.518-1.932c-0.811-0.185-1.648-0.291-2.507-0.322v2C165.68,263.055,166.345,263.137,166.989,263.279z"/><path d="M175.467,271.043l1.936-0.518c-0.251-0.815-0.58-1.596-0.974-2.337l-1.738,1.004    C175,269.782,175.264,270.399,175.467,271.043z"/></g></g></svg>
+            <svg data-bind="css: {iconon: pitchSnap}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><path d="M0,0v100h100V0H0z M4,96V4h14v64h6v28H4z M28,96V68h6V4h8v64h6v28H28z M52,96V68h6V4h8v64h6v28H52z M96,96H76V68h6V4h14V96z"/></svg>
+            </div>
+            <p data-bind="visible: pitchSnap" class="pitchsnapscale">Scale: <span data-bind="text:scaleName"></span></p>
+            <canvas class="visualization" data-bind="attr: { id: 'visual_'+$index() }"></canvas>
+        </div>
+    </div>
+
+    <br>
+
+
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script type="text/javascript" src="js/joysynth.js"></script>

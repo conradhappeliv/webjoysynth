@@ -3,38 +3,13 @@ let lastdraw = 0;
 let outputNode;
 let controllers = {};
 let viewModel = {
-    controllers: ko.observableArray([
-
-    ])
-};
-
-function createControllers() {
-    let controllers = document.getElementsByClassName('controller');
-    for(let i = 0; i < controllers.length; i++) {
-        controllers[i].innerHTML = '' +
-            '<div class="joystick jsleft"><div class="jsinner"></div></div>' +
-            '<div class="joystick jsright"><div class="jsinner"></div></div>' +
-            '<div class="button trigger tright"></div>' +
-            '<div class="button trigger tleft"></div>' +
-            '<div class="minibutton start"></div>' +
-            '<div class="minibutton select"></div>' +
-            '<div class="button shoulder shoulderright"></div>' +
-            '<div class="button shoulder shoulderleft"></div>' +
-            '<div class="button home"></div>' +
-            '<div class="rightbuttons">' +
-                '<div class="button A">A</div>' +
-                '<div class="button B">B</div>' +
-                '<div class="button X">X</div>' +
-                '<div class="button Y">Y</div>' +
-            '</div>' +
-            '<div class="dpad">' +
-                '<div class="button dleft"></div>' +
-                '<div class="button dup"></div>' +
-                '<div class="button ddown"></div>' +
-                '<div class="button dright"></div>' +
-            '</div>';
+    controllers: ko.observableArray([]),
+    showAbout: ko.observable(false),
+    toggleAbout: function() {
+        console.log('here');
+        this.showAbout(!this.showAbout());
     }
-}
+};
 
 function pollGamepads(timestamp) {
     requestAnimationFrame(pollGamepads);
@@ -92,8 +67,6 @@ function init() {
     compressor.connect(aCtx.destination);
 
     requestAnimationFrame(pollGamepads);
-
-    createControllers();
 
     ko.applyBindings(viewModel);
 }
