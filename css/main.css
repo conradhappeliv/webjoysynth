@@ -9,6 +9,10 @@ body {
     color: white;
 }
 
+p {
+    margin: 10px 0;
+}
+
 a {
     cursor: pointer;
     color: white;
@@ -86,4 +90,20 @@ h1, h2, h3, h4, h5, h6 {
 .pitchsnapscale {
     display:inline-block;
     margin: 0 auto;
+}
+
+#help {
+    zoom:.3;
+}
+
+#help img {
+
+}
+
+#tooltip {
+    position:absolute;
+    z-index: 999999;
+    background: #135eaf;
+    color:#ffffff;
+    padding:5px;
 }

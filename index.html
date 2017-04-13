@@ -19,7 +19,26 @@
             <div data-bind="visible: showAbout">
                 <p>Plug in up to four gamepads and make some music! Written in vanilla JS using the Javascript Web Audio API and Gamepad API.</p>
                 <a href="https://github.com/conradhappeliv/webjoysynth">https://github.com/conradhappeliv/webjoysynth</a>
-                <br><br>
+                <p>Hover over the different controls below to see what they do:</p>
+                <div id="help">
+                    <img src="img/controller.png" alt="" usemap="#helpmap" />
+                    <map name="helpmap" id="helpmap">
+                        <area data-tooltip alt="" title="Filter Cutoff" href="#" shape="poly" coords="923,70,987,69,1002,165,929,162" />
+                        <area data-tooltip alt="" title="Delay Amount" href="#" shape="poly" coords="352,163,278,167,290,72,354,72" />
+                        <area data-tooltip alt="" title="Lock Delay Amount" href="#" shape="poly" coords="182,206,269,173,372,171,385,189,384,224,173,254" />
+                        <area data-tooltip alt="" title="Lock Filter Cutoff" href="#" shape="poly" coords="887,184,905,170,996,173,1093,217,1100,256,980,225,893,230" />
+                        <area data-tooltip alt="" title="Octave Up" href="#" shape="poly" coords="952,300,1036,303,1037,383,956,384" />
+                        <area data-tooltip alt="" title="N/A" href="#" shape="poly" coords="1047,383,1122,380,1127,452,1041,450" />
+                        <area data-tooltip alt="" title="Lock Note" href="#" shape="poly" coords="945,465,1026,460,1023,535,944,532" />
+                        <area data-tooltip alt="" title="Octave Down" href="#" shape="poly" coords="862,387,934,387,935,461,857,459" />
+                        <area data-tooltip alt="" title="N/A" href="#" shape="poly" coords="481,406,538,406,540,447,483,447" />
+                        <area data-tooltip alt="" title="Pitch Snap" href="#" shape="poly" coords="739,407,794,409,797,448,738,452" />
+                        <area data-tooltip alt="" title="Wave-Shape (Press to Lock)" href="#" shape="poly" coords="687,540,797,491,926,563,875,653,856,684,798,698,749,678,730,654,673,596" />
+                        <area data-tooltip alt="" title="Change Pitch Snap Scale" href="#" shape="poly" coords="449,488,543,507,588,578,546,670,460,703,376,671,334,590,373,512" />
+                        <area data-tooltip alt="" title="Pitch (Press for Modulation)" href="#" shape="poly" coords="269,528,332,512,382,492,411,431,389,373,323,326,233,324,169,371,165,443,204,487,237,517" />
+                        <area data-tooltip alt="" title="N/A" href="#" shape="poly" coords="637,366,691,383,712,426,683,470,637,485,586,466,563,426,583,380" />
+                    </map>
+                </div>
                 <p>Icons from the Noun Project: </p>
                 <ul>
                     <li>Speaker by Dávid Gladiš</li>
@@ -56,6 +75,7 @@
 
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script type="text/javascript" src="js/Tooltip.js"></script>
     <script type="text/javascript" src="js/joysynth.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 </body>
